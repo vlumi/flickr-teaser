@@ -9,6 +9,10 @@
   body { font: 16px/1.5 system-ui, sans-serif; max-width: 60rem; margin: 2rem auto; padding: 0 1rem; color: #222; background: #faf6f4; }
   h1 { font-size: 1.4rem; } h2 { font-size: 1.05rem; margin-top: 2rem; }
   code { background: #eee; padding: .1em .3em; border-radius: 4px; }
+  pre { background: #eee; padding: .8rem 1rem; border-radius: 8px; overflow-x: auto; font-size: .85rem; line-height: 1.45; }
+  pre code { background: none; padding: 0; }
+  a { color: #8c2233; }
+  .note { color: #666; font-size: .9rem; }
   .flickr-teaser { --ft-accent: #8c2233; --ft-bg: #fff; }
   .albums { display: grid; gap: 1.5rem; grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr)); }
   .albums .flickr-teaser { --ft-ratio: 1 / 1; --ft-max-height: none; }
@@ -19,7 +23,16 @@
 </head>
 <body>
 <h1>flickr-teaser</h1>
-<p>Serve this directory over HTTP (any static server; <code>file://</code> blocks the script) to see the feeds load.</p>
+<p>A live, shuffled glimpse of a public Flickr album: one script, one stylesheet, one element per album. No dependencies, no build step, no API key.
+<a href="https://github.com/vlumi/flickr-teaser">Source and README on GitHub</a> ·
+<a href="https://github.com/vlumi/flickr-teaser/releases/latest">latest release</a> · MIT.</p>
+<pre><code>&lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/vlumi/flickr-teaser@v0.1.0/flickr-teaser.css"&gt;
+&lt;script src="https://cdn.jsdelivr.net/gh/vlumi/flickr-teaser@v0.1.0/flickr-teaser.js" defer&gt;&lt;/script&gt;
+
+&lt;div class="flickr-teaser" data-set="72157708563248894" data-nsid="75595126@N00" data-user="vlumi"&gt;
+  &lt;a href="https://www.flickr.com/photos/vlumi/albums/72157708563248894"&gt;See the album on Flickr&lt;/a&gt;
+&lt;/div&gt;</code></pre>
+<p class="note">Everything below is live from Flickr's public feeds, reshuffled on every load. Running this file locally needs any static server; <code>file://</code> blocks the script.</p>
 
 <h2>Three albums in a grid, square frames</h2>
 <div class="albums">

@@ -4,8 +4,8 @@ A live, shuffled glimpse of a public Flickr album: one script, one
 stylesheet, one element per album. No dependencies, no build step, no API key.
 
 ```html
-<link rel="stylesheet" href="flickr-teaser.css">
-<script src="flickr-teaser.js" defer></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/vlumi/flickr-teaser@v0.1.0/flickr-teaser.css">
+<script src="https://cdn.jsdelivr.net/gh/vlumi/flickr-teaser@v0.1.0/flickr-teaser.js" defer></script>
 
 <div class="flickr-teaser" data-set="72157708563248894" data-nsid="75595126@N00" data-user="vlumi">
   <a href="https://www.flickr.com/photos/vlumi/albums/72157708563248894">See the album on Flickr</a>
@@ -23,8 +23,17 @@ focus pauses. With `prefers-reduced-motion` it never auto-advances.
 The children you put inside the element are the fallback: shown when
 JavaScript is off or the feed cannot be reached, hidden otherwise.
 
-See it running: [misaki.fi/photography](https://misaki.fi/photography/)
-(or [demo/index.html](demo/index.html) over any static server).
+See it running: [misaki.fi/photography](https://misaki.fi/photography/),
+or the [demo](https://vlumi.github.io/flickr-teaser/demo/).
+
+## Getting the files
+
+- **CDN**, pinned to a release tag (recommended):
+  `https://cdn.jsdelivr.net/gh/vlumi/flickr-teaser@v0.1.0/flickr-teaser.js`
+  and `…/flickr-teaser.css`. Bump the tag to upgrade; nothing changes under
+  you otherwise.
+- **Copy the two files** into your project. They have no build step and no
+  dependencies, so vendoring is a perfectly good way to use them.
 
 ## Attributes
 
