@@ -1,0 +1,13 @@
+{
+  "name": "flickr-teaser",
+  "version": "0.1.0",
+  "description": "A live, shuffled glimpse of a public Flickr album — one script, one stylesheet, one element, no API key.",
+  "main": "flickr-teaser.js",
+  "style": "flickr-teaser.css",
+  "files": ["flickr-teaser.js", "flickr-teaser.css"],
+  "keywords": ["flickr", "slideshow", "photos", "gallery", "album", "vanilla-js"],
+  "author": "Ville Misaki",
+  "license": "MIT",
+  "repository": { "type": "git", "url": "https://github.com/vlumi/flickr-teaser.git" },
+  "homepage": "https://github.com/vlumi/flickr-teaser"
+}

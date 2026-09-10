@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>flickr-teaser demo</title>
+<link rel="stylesheet" href="../flickr-teaser.css">
+<style>
+  body { font: 16px/1.5 system-ui, sans-serif; max-width: 60rem; margin: 2rem auto; padding: 0 1rem; color: #222; background: #faf6f4; }
+  h1 { font-size: 1.4rem; } h2 { font-size: 1.05rem; margin-top: 2rem; }
+  code { background: #eee; padding: .1em .3em; border-radius: 4px; }
+  .flickr-teaser { --ft-accent: #8c2233; --ft-bg: #fff; }
+  .albums { display: grid; gap: 1.5rem; grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr)); }
+  .albums .flickr-teaser { --ft-ratio: 1 / 1; --ft-max-height: none; }
+  .albums h3 { font-size: 1rem; margin: 0 0 .4rem; }
+  .cover { --ft-ratio: 16 / 9; --ft-fit: cover; }
+</style>
+<script src="../flickr-teaser.js" defer></script>
+</head>
+<body>
+<h1>flickr-teaser</h1>
+<p>Serve this directory over HTTP (any static server; <code>file://</code> blocks the script) to see the feeds load.</p>
+
+<h2>Three albums in a grid, square frames</h2>
+<div class="albums">
+  <div><h3>Daily B/W</h3>
+    <div class="flickr-teaser" data-set="72157708563248894" data-nsid="75595126@N00" data-user="vlumi" data-no-link>
+      <a href="https://www.flickr.com/photos/vlumi/albums/72157708563248894">Daily B/W on Flickr</a></div></div>
+  <div><h3>Dammed</h3>
+    <div class="flickr-teaser" data-set="72177720300824521" data-nsid="75595126@N00" data-user="vlumi" data-no-link>
+      <a href="https://www.flickr.com/photos/vlumi/albums/72177720300824521">Dammed on Flickr</a></div></div>
+  <div><h3>Offerings</h3>
+    <div class="flickr-teaser" data-set="72157673623718396" data-nsid="75595126@N00" data-user="vlumi" data-no-link>
+      <a href="https://www.flickr.com/photos/vlumi/albums/72157673623718396">Offerings on Flickr</a></div></div>
+</div>
+
+<h2>Wide frame, photos cropped to fill, faster, with the album link</h2>
+<div class="flickr-teaser cover" data-set="72177720300824521" data-nsid="75595126@N00" data-user="vlumi" data-interval="3000" data-all-label="More dams →">
+  <a href="https://www.flickr.com/photos/vlumi/albums/72177720300824521">Dammed on Flickr</a>
+</div>
+
+<h2>A photostream, feed order, manual only</h2>
+<div class="flickr-teaser" data-nsid="75595126@N00" data-user="vlumi" data-no-shuffle data-no-auto data-all-label="Photostream →">
+  <a href="https://www.flickr.com/photos/vlumi/">vlumi on Flickr</a>
+</div>
+
+<h2>Wrong id — the fallback shows</h2>
+<div class="flickr-teaser" data-set="1" data-nsid="0@N00">
+  <a href="https://www.flickr.com/">This one fails on purpose; the fallback link is what you see.</a>
+</div>
+</body>
+</html>

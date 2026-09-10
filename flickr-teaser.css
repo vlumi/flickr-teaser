@@ -1,0 +1,68 @@
+/*! flickr-teaser v0.1.0 — styles for the element flickr-teaser.js builds.
+   MIT — https://github.com/vlumi/flickr-teaser
+   Themed through custom properties; set them on .flickr-teaser or any
+   ancestor. Defaults are neutral so it drops into any page unstyled. */
+
+.flickr-teaser {
+  --ft-bg: #f4f4f4;                 /* frame ground, behind letterboxing */
+  --ft-border: rgba(0, 0, 0, 0.12);
+  --ft-fg: inherit;                 /* caption */
+  --ft-muted: rgba(0, 0, 0, 0.55);  /* album link */
+  --ft-accent: #0a66c2;             /* hover, focus ring */
+  --ft-radius: 12px;
+  --ft-ratio: 3 / 2;                /* frame aspect ratio */
+  --ft-max-height: 60vh;
+  --ft-fit: contain;                /* or cover */
+  --ft-fade: 0.6s;
+  display: block;
+}
+
+.flickr-teaser__stage { position: relative; }
+.flickr-teaser__frame {
+  display: block; position: relative; width: 100%; aspect-ratio: var(--ft-ratio); max-height: var(--ft-max-height);
+  background: var(--ft-bg); border: 1px solid var(--ft-border); border-radius: var(--ft-radius);
+  overflow: hidden;
+}
+.flickr-teaser__frame:focus-visible { outline: 2px solid var(--ft-accent); outline-offset: 2px; }
+
+/* ‹ › over the frame's edges. Faint until the pointer is over the teaser or
+   focus is inside it; always visible where there is no hover (touch). */
+.flickr-teaser__nav {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  width: 2.4rem; height: 2.4rem; border-radius: 50%; border: 1px solid var(--ft-border);
+  background: var(--ft-bg); color: var(--ft-fg); font: inherit; font-size: 1.6rem; line-height: 1;
+  display: flex; align-items: center; justify-content: center; padding: 0 0 0.15em; cursor: pointer;
+  opacity: 0; transition: opacity 0.15s ease, color 0.08s ease;
+}
+.flickr-teaser__nav--prev { left: 0.6rem; }
+.flickr-teaser__nav--next { right: 0.6rem; }
+.flickr-teaser:hover .flickr-teaser__nav, .flickr-teaser:focus-within .flickr-teaser__nav { opacity: 0.85; }
+.flickr-teaser__nav:hover { color: var(--ft-accent); opacity: 1; }
+.flickr-teaser__nav:focus-visible { outline: 2px solid var(--ft-accent); outline-offset: 2px; opacity: 1; }
+@media (hover: none) { .flickr-teaser__nav { opacity: 0.85; } }
+.flickr-teaser__frame img {
+  position: absolute; inset: 0; width: 100%; height: 100%; object-fit: var(--ft-fit);
+  opacity: 0; transition: opacity var(--ft-fade) ease;
+}
+.flickr-teaser__frame img.is-in { opacity: 1; }
+.flickr-teaser__frame img.is-out { opacity: 0; pointer-events: none; }
+
+.flickr-teaser__meta {
+  display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap;
+  margin: 0.45rem 0 0; font-size: 0.85rem;
+}
+.flickr-teaser__meta a { text-decoration: none; }
+.flickr-teaser__caption { color: var(--ft-fg); }
+.flickr-teaser__all { color: var(--ft-muted); }
+.flickr-teaser__meta a:hover { color: var(--ft-accent); }
+
+/* States. Fallback children show only when the feed failed (or without JS,
+   when the script never runs and nothing is hidden). */
+.flickr-teaser:not([data-state="ready"]) .flickr-teaser__nav { display: none; }
+.flickr-teaser[data-state]:not([data-state="failed"]) > :not(.flickr-teaser__stage):not(.flickr-teaser__meta) { display: none; }
+.flickr-teaser[data-state="failed"] .flickr-teaser__stage,
+.flickr-teaser[data-state="failed"] .flickr-teaser__meta { display: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .flickr-teaser__frame img { transition: none; }
+}
