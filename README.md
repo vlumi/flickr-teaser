@@ -1,11 +1,14 @@
 # flickr-teaser
 
+[![npm](https://img.shields.io/npm/v/flickr-teaser)](https://www.npmjs.com/package/flickr-teaser)
+[![CI](https://github.com/vlumi/flickr-teaser/actions/workflows/ci.yml/badge.svg)](https://github.com/vlumi/flickr-teaser/actions/workflows/ci.yml)
+
 A live, shuffled glimpse of a public Flickr album: one script, one
-stylesheet, one element per album. No dependencies, no build step, no API key.
+stylesheet, one element per album. No dependencies, no API key.
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/vlumi/flickr-teaser@v0.1.0/flickr-teaser.css">
-<script src="https://cdn.jsdelivr.net/gh/vlumi/flickr-teaser@v0.1.0/flickr-teaser.js" defer></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flickr-teaser@1/dist/flickr-teaser.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flickr-teaser@1/dist/flickr-teaser.min.js" defer></script>
 
 <div class="flickr-teaser" data-set="72157708563248894" data-nsid="75595126@N00" data-user="vlumi">
   <a href="https://www.flickr.com/photos/vlumi/albums/72157708563248894">See the album on Flickr</a>
@@ -26,14 +29,25 @@ JavaScript is off or the feed cannot be reached, hidden otherwise.
 See it running: [misaki.fi/photography](https://misaki.fi/photography/),
 or the [demo](https://vlumi.github.io/flickr-teaser/demo/).
 
-## Getting the files
+## Getting it
 
-- **CDN**, pinned to a release tag (recommended):
-  `https://cdn.jsdelivr.net/gh/vlumi/flickr-teaser@v0.1.0/flickr-teaser.js`
-  and `…/flickr-teaser.css`. Bump the tag to upgrade; nothing changes under
-  you otherwise.
-- **Copy the two files** into your project. They have no build step and no
-  dependencies, so vendoring is a perfectly good way to use them.
+- **CDN**, from the npm package, pinned to a major version:
+  `https://cdn.jsdelivr.net/npm/flickr-teaser@1/dist/flickr-teaser.min.js`
+  and `…/dist/flickr-teaser.min.css`. Pin to an exact version
+  (`@1.0.0`) if you prefer nothing to change without you.
+- **npm**, for a bundler: `npm install flickr-teaser`, then
+
+  ```ts
+  import { mountAll } from "flickr-teaser";
+  import "flickr-teaser/flickr-teaser.css";
+
+  mountAll();
+  ```
+
+  The package is an ES module with type declarations. The script-tag build
+  is also there as `flickr-teaser/browser`.
+- **Copy** `dist/flickr-teaser.min.js` and `dist/flickr-teaser.min.css` from a
+  [release](https://github.com/vlumi/flickr-teaser/releases) into your project.
 
 ## Attributes
 
@@ -53,9 +67,22 @@ or the [demo](https://vlumi.github.io/flickr-teaser/demo/).
 
 With only `data-nsid`, the element shows the user's photostream.
 
-Elements added to the page later: `flickrTeaser.mount(element)` or
-`flickrTeaser.mountAll(container)`. Each mounted element gets `next()` and
-`back()` methods.
+## API
+
+The script-tag build mounts every `.flickr-teaser` on load and exposes the
+same functions as `window.flickrTeaser`.
+
+- `mountAll(scope = document)` — mount every `.flickr-teaser` under `scope`;
+  returns the teasers.
+- `mount(element, overrides?)` — mount one element. Options come from its
+  data attributes, and `overrides` (a `TeaserOptions` object with the same
+  names in camelCase: `set`, `nsid`, `user`, `tags`, `interval`, `jitter`,
+  `size`, `allLabel`, `noShuffle`, `noAuto`, `noLink`) win over them.
+  Mounting a mounted element returns the existing teaser.
+- A teaser has `next()`, `back()`, `destroy()` and `element`. `destroy`
+  stops the clock, removes what was built and shows the fallback again.
+- Also exported for the curious: `feedURL`, `albumURL`, `sized`,
+  `optionsFrom`.
 
 ## Theming
 
@@ -102,8 +129,18 @@ their content elsewhere.
 
 ## Browser support
 
-Everything current. It uses `aspect-ratio`, `inset` and `:focus-within`, so
-roughly 2021 onwards; older browsers get the fallback content.
+Everything current. The stylesheet uses `aspect-ratio`, `inset` and
+`:focus-within`, so roughly 2021 onwards; older browsers get the fallback
+content.
+
+## Developing
+
+TypeScript source in `src/`, plain CSS beside it, tests in `tests/` (Vitest,
+jsdom). `npm test`, `npm run lint`, `npm run typecheck`, `npm run build`
+(tsup → `dist/`). `demo/dev.html` loads the local build over any static
+server. Releases: bump the version, tag `vX.Y.Z`, publish a GitHub release;
+the workflow tests, builds, publishes to npm with provenance, and attaches the
+built files.
 
 ## License
 

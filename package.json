@@ -1,13 +1,72 @@
 {
   "name": "flickr-teaser",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "A live, shuffled glimpse of a public Flickr album — one script, one stylesheet, one element, no API key.",
-  "main": "flickr-teaser.js",
-  "style": "flickr-teaser.css",
-  "files": ["flickr-teaser.js", "flickr-teaser.css"],
-  "keywords": ["flickr", "slideshow", "photos", "gallery", "album", "vanilla-js"],
+  "type": "module",
+  "main": "./dist/flickr-teaser.js",
+  "types": "./dist/flickr-teaser.d.ts",
+  "style": "./dist/flickr-teaser.css",
+  "unpkg": "./dist/flickr-teaser.min.js",
+  "jsdelivr": "./dist/flickr-teaser.min.js",
+  "exports": {
+    ".": {
+      "types": "./dist/flickr-teaser.d.ts",
+      "default": "./dist/flickr-teaser.js"
+    },
+    "./browser": "./dist/flickr-teaser.min.js",
+    "./flickr-teaser.css": "./dist/flickr-teaser.css",
+    "./flickr-teaser.min.css": "./dist/flickr-teaser.min.css",
+    "./package.json": "./package.json"
+  },
+  "sideEffects": [
+    "./dist/flickr-teaser.min.js",
+    "*.css"
+  ],
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup && npm run build:css",
+    "build:css": "cp src/flickr-teaser.css dist/flickr-teaser.css && esbuild src/flickr-teaser.css --minify --outfile=dist/flickr-teaser.min.css --log-level=warning",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
+    "prepublishOnly": "npm run lint && npm run typecheck && npm run test && npm run build"
+  },
+  "keywords": [
+    "flickr",
+    "slideshow",
+    "photos",
+    "gallery",
+    "album",
+    "vanilla-js",
+    "typescript"
+  ],
   "author": "Ville Misaki",
   "license": "MIT",
-  "repository": { "type": "git", "url": "https://github.com/vlumi/flickr-teaser.git" },
-  "homepage": "https://github.com/vlumi/flickr-teaser"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vlumi/flickr-teaser.git"
+  },
+  "homepage": "https://vlumi.github.io/flickr-teaser/demo/",
+  "bugs": "https://github.com/vlumi/flickr-teaser/issues",
+  "engines": {
+    "node": ">=20"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@vitest/coverage-v8": "^4.1.9",
+    "esbuild": "^0.27.0",
+    "eslint": "^10.5.0",
+    "jsdom": "^28.0.0",
+    "tsup": "^8.5.1",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.61.1",
+    "vitest": "^4.1.9"
+  },
+  "allowScripts": {
+    "esbuild@0.27.7": true
+  }
 }
