@@ -70,10 +70,29 @@ describe("mount", () => {
     const el = element(album);
     mount(el);
     const { script, answer } = lastJsonp();
-    const cb = new URL(script.src).searchParams.get("jsoncallback") as `__flickrTeaser${number}`;
+    const cb = new URL(script.src).searchParams.get("jsoncallback") as `__flickrTeaser_${string}`;
     answer(feed(1));
     expect(script.isConnected).toBe(false);
     expect(window[cb]).toBeUndefined();
+  });
+
+  it("gives every feed request its own callback name", () => {
+    mount(element(album));
+    const a = lastJsonp().url;
+    mount(element(album));
+    const b = lastJsonp().url;
+    expect(new URL(a).searchParams.get("jsoncallback")).not.toBe(new URL(b).searchParams.get("jsoncallback"));
+    expect(new URL(a).searchParams.get("jsoncallback")).toMatch(/^__flickrTeaser_[a-z0-9]+\d+$/);
+  });
+
+  it("overrides passed to mount win over data attributes", () => {
+    const el = element({ ...album, size: "m" });
+    mount(el, { set: "9999", size: "b" });
+    expect(lastJsonp().url).toContain("set=9999");
+    lastJsonp().answer(feed(1));
+    return flush().then(() => {
+      expect(frameImgs(el)[0]?.getAttribute("src")).toContain("_b.jpg");
+    });
   });
 
   it("mounting twice returns the same teaser; mountAll finds every element", () => {
@@ -227,6 +246,24 @@ describe("timing", () => {
     c.dispatchEvent(new Event("mouseleave"));
     await vi.advanceTimersByTimeAsync(1600);
     expect(caption(c).textContent).toBe("Photo 2");
+    vi.useRealTimers();
+  });
+
+  it("pauses while the page is hidden and resumes when it is shown again", async () => {
+    vi.useFakeTimers();
+    vi.spyOn(Math, "random").mockReturnValue(0.5);
+    const el = element({ ...album, "no-shuffle": "", interval: "1000", jitter: "0" });
+    mount(el);
+    lastJsonp().answer(feed(3));
+    await vi.advanceTimersByTimeAsync(0);
+    Object.defineProperty(document, "hidden", { configurable: true, get: () => true });
+    document.dispatchEvent(new Event("visibilitychange"));
+    await vi.advanceTimersByTimeAsync(10_000);
+    expect(caption(el).textContent).toBe("Photo 1");
+    Object.defineProperty(document, "hidden", { configurable: true, get: () => false });
+    document.dispatchEvent(new Event("visibilitychange"));
+    await vi.advanceTimersByTimeAsync(1000);
+    expect(caption(el).textContent).toBe("Photo 2");
     vi.useRealTimers();
   });
 
