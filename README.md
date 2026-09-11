@@ -142,7 +142,15 @@ server. Releases: bump the version, tag `vX.Y.Z`, publish a GitHub release;
 the workflow tests, builds, stages the version on npm with provenance, and
 attaches the built files. The staged version goes live once approved on
 npmjs.com (or `npm stage approve <id>`); the trusted publisher cannot publish
-directly.
+directly. After approving, purge jsDelivr's cached range resolution so
+`@1` picks the new version up everywhere at once instead of within twelve
+hours:
+
+```sh
+for f in flickr-teaser.min.js flickr-teaser.min.css; do
+  curl -fsS "https://purge.jsdelivr.net/npm/flickr-teaser@1/dist/$f"
+done
+```
 
 ## License
 
