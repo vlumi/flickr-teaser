@@ -13,7 +13,7 @@ export function lastJsonp() {
   const scripts = Array.from(document.head.querySelectorAll("script[src*='jsoncallback']"));
   const script = scripts[scripts.length - 1] as HTMLScriptElement | undefined;
   if (!script) throw new Error("no JSONP script was injected");
-  const cb = new URL(script.src).searchParams.get("jsoncallback") as `__flickrTeaser${number}`;
+  const cb = new URL(script.src).searchParams.get("jsoncallback") as `__flickrTeaser_${string}`;
   return {
     script,
     url: script.src,

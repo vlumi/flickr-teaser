@@ -137,7 +137,7 @@ content.
 
 TypeScript source in `src/`, plain CSS beside it, tests in `tests/` (Vitest,
 jsdom). `npm test`, `npm run lint`, `npm run typecheck`, `npm run build`
-(tsup → `dist/`). `demo/dev.html` loads the local build over any static
+(cleans, then tsup → `dist/`), `npm run clean`. `demo/dev.html` loads the local build over any static
 server. Releases: bump the version, tag `vX.Y.Z`, publish a GitHub release;
 the workflow tests, builds, publishes to npm with provenance, and attaches the
 built files.

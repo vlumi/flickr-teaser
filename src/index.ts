@@ -67,14 +67,18 @@ export interface Teaser {
 
 declare global {
   interface Window {
-    [key: `__flickrTeaser${number}`]: ((data: Feed) => void) | undefined;
+    [key: `__flickrTeaser_${string}`]: ((data: Feed) => void) | undefined;
   }
 }
 
+/* Callback names carry a per-load random tag as well as a counter, so two
+   copies of this code on one page (say, a bundle and the script tag) never
+   answer each other's feeds. */
+const tag = Math.random().toString(36).slice(2, 8);
 let uid = 0;
 
 function jsonp(url: string, ok: (data: Feed) => void, fail: (err: Error) => void): () => void {
-  const cb = `__flickrTeaser${++uid}` as const;
+  const cb = `__flickrTeaser_${tag}${++uid}` as const;
   const script = document.createElement("script");
   const timer = setTimeout(() => {
     cleanup();
@@ -170,9 +174,10 @@ export function mount(root: HTMLElement, overrides: TeaserOptions = {}): Teaser 
   if (existing) return existing;
 
   const o: TeaserOptions = { ...optionsFrom(root), ...overrides };
-  const reduce = typeof window.matchMedia === "function" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const reduce = (): boolean =>
+    typeof window.matchMedia === "function" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const size = o.size ?? "z";
-  const interval = Math.max(1000, Number.isFinite(o.interval) ? (o.interval as number) : 5000);
+  const interval = Math.max(1000, o.interval !== undefined && Number.isFinite(o.interval) ? o.interval : 5000);
   const jitter = o.jitter !== undefined && Number.isFinite(o.jitter) ? Math.min(0.9, Math.max(0, o.jitter)) : 0.4;
 
   const url = feedURL(o);
@@ -185,11 +190,11 @@ export function mount(root: HTMLElement, overrides: TeaserOptions = {}): Teaser 
   const prev = el("button", "flickr-teaser__nav flickr-teaser__nav--prev", stage);
   prev.type = "button";
   prev.setAttribute("aria-label", "Previous photo");
-  prev.innerHTML = "&#8249;";
+  prev.textContent = "\u2039";
   const nextBtn = el("button", "flickr-teaser__nav flickr-teaser__nav--next", stage);
   nextBtn.type = "button";
   nextBtn.setAttribute("aria-label", "Next photo");
-  nextBtn.innerHTML = "&#8250;";
+  nextBtn.textContent = "\u203a";
   const meta = el("p", "flickr-teaser__meta", root);
   const caption = el("a", "flickr-teaser__caption", meta);
   caption.target = "_blank";
@@ -212,7 +217,7 @@ export function mount(root: HTMLElement, overrides: TeaserOptions = {}): Teaser 
   const wait = (): number => Math.round(interval * (1 + jitter * (Math.random() * 2 - 1)));
   const schedule = (): void => {
     stop();
-    if (reduce || paused || o.noAuto) return;
+    if (reduce() || paused || o.noAuto) return;
     timer = setTimeout(() => {
       step(1);
       schedule();
@@ -307,7 +312,7 @@ export function mount(root: HTMLElement, overrides: TeaserOptions = {}): Teaser 
       step(1);
       // Stagger the very first change across the interval.
       stop();
-      if (!(reduce || paused || o.noAuto)) {
+      if (!(reduce() || paused || o.noAuto)) {
         timer = setTimeout(() => {
           step(1);
           schedule();
