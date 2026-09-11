@@ -139,8 +139,10 @@ TypeScript source in `src/`, plain CSS beside it, tests in `tests/` (Vitest,
 jsdom). `npm test`, `npm run lint`, `npm run typecheck`, `npm run build`
 (cleans, then tsup → `dist/`), `npm run clean`. `demo/dev.html` loads the local build over any static
 server. Releases: bump the version, tag `vX.Y.Z`, publish a GitHub release;
-the workflow tests, builds, publishes to npm with provenance, and attaches the
-built files.
+the workflow tests, builds, stages the version on npm with provenance, and
+attaches the built files. The staged version goes live once approved on
+npmjs.com (or `npm stage approve <id>`); the trusted publisher cannot publish
+directly.
 
 ## License
 
