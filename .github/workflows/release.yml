@@ -6,11 +6,12 @@ on:
 
 permissions:
   contents: write
-  id-token: write
 
+# Publishing to npm is done by hand (`npm publish` from main, see the README);
+# this only checks the release and attaches the built files to it.
 jobs:
-  publish:
-    name: Publish to npm
+  attach:
+    name: Attach the built files
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
@@ -20,11 +21,6 @@ jobs:
         with:
           node-version: 24
           cache: npm
-          registry-url: https://registry.npmjs.org
-
-      # `npm stage` needs a current npm; the one bundled with Node 24 may predate it.
-      - name: Update npm
-        run: npm install -g npm@latest
 
       - name: Install dependencies
         run: npm ci
@@ -49,12 +45,6 @@ jobs:
 
       - name: Build
         run: npm run build
-
-      # The trusted publisher is allowed to stage only (npm's recommendation):
-      # the version waits on npmjs.com until the owner approves it under
-      # Settings → Staged versions, or with `npm stage approve <id>`.
-      - name: Stage the version on npm
-        run: npm stage publish --provenance --access public
 
       - name: Attach the built files to the release
         env:
