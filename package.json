@@ -1,6 +1,6 @@
 {
   "name": "flickr-teaser",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A live, shuffled glimpse of a public Flickr album — one script, one stylesheet, one element, no API key.",
   "type": "module",
   "main": "./dist/flickr-teaser.js",
