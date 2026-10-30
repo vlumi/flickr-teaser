@@ -47,9 +47,12 @@
 .flickr-teaser__frame img.is-in { opacity: 1; }
 .flickr-teaser__frame img.is-out { opacity: 0; pointer-events: none; }
 
+/* The row is built empty and filled when the feed answers; reserving its one
+   line keeps the page from growing under the reader at that moment. */
 .flickr-teaser__meta {
   display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap;
   margin: 0.45rem 0 0; font-size: 0.85rem;
+  min-height: 1.5em; min-height: 1lh;
 }
 .flickr-teaser__meta a { text-decoration: none; }
 .flickr-teaser__caption { color: var(--ft-fg); }
