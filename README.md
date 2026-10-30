@@ -138,13 +138,15 @@ content.
 TypeScript source in `src/`, plain CSS beside it, tests in `tests/` (Vitest,
 jsdom). `npm test`, `npm run lint`, `npm run typecheck`, `npm run build`
 (cleans, then tsup → `dist/`), `npm run clean`. `demo/dev.html` loads the local build over any static
-server. Releases: bump the version, tag `vX.Y.Z`, publish a GitHub release;
-the workflow tests, builds, stages the version on npm with provenance, and
-attaches the built files. The staged version goes live once approved on
-npmjs.com (or `npm stage approve <id>`); the trusted publisher cannot publish
-directly. After approving, purge jsDelivr's cached range resolution so
-`@1` picks the new version up everywhere at once instead of within twelve
-hours:
+server.
+
+Releases are by hand: bump the version in `package.json` (a pull request like
+any other), then from a clean checkout of `main` run `npm publish --access
+public` (`prepublishOnly` lints, typechecks, tests and builds first). Tag
+`vX.Y.Z` and publish a GitHub release; the workflow checks that the tag
+matches the version, builds, and attaches the built files to the release.
+Then purge jsDelivr's cached range resolution so `@1` picks the new version
+up everywhere at once instead of within twelve hours:
 
 ```sh
 for f in flickr-teaser.min.js flickr-teaser.min.css; do
